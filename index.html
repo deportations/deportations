@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Deportations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        pre {
+            white-space: pre-wrap; /* Keeps the formatting intact */
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<center>
+  <h1>List of Deportations cuz damn trump is prez now</h1>
+
+  <!-- Dynamically loaded contents of people.txt will appear here -->
+  <pre id="people-list">Loading people list...</pre>
+
+</center>
+
+<script>
+    // Function to fetch the contents of people.txt and display it
+    fetch('people.txt')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('File not found');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Insert the file content into the pre element with id "people-list"
+            document.getElementById('people-list').textContent = data;
+        })
+        .catch(error => {
+            // If there's an error (e.g., file not found), display a message
+            document.getElementById('people-list').textContent = 'Error loading people.txt';
+            console.error(error);
+        });
+</script>
+
+</body>
+</html>
