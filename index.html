@@ -5,43 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List of Deportations</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Resetting margin, padding and box-sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        pre {
-            white-space: pre-wrap; /* Keeps the formatting intact */
-            word-wrap: break-word;
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #c0392b, #8e44ad);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+            animation: backgroundShift 5s infinite alternate;
+        }
+
+        /* Cool glowing text effect */
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px rgba(255, 255, 255, 0.5);
+            animation: fadeInText 3s ease-in-out;
+        }
+
+        /* Styling for the names list container */
+        #people-list {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            line-height: 2;
+            cursor: pointer;
+            animation: fadeIn 2s ease-out;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Hover effect for names */
+        #people-list span {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        #people-list span:hover {
+            color: #f39c12;
+            transform: scale(1.1);
+        }
+
+        /* Animations for the names */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background: linear-gradient(135deg, #c0392b, #8e44ad);
+            }
+            100% {
+                background: linear-gradient(135deg, #e74c3c, #9b59b6);
+            }
+        }
+
+        /* Keyframe for flying animation */
+        @keyframes flyAway {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(100vw + 100px), calc(-100vh - 100px)) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Flying airplane effect when a name is clicked */
+        .flying {
+            animation: flyAway 2s forwards ease-in-out;
         }
     </style>
+    <!-- Adding Google Font for cool look -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<center>
-  <h1>List of Deportations cuz damn trump is prez now</h1>
+    <center>
+        <h1>List of Deportations cuz damn trump is prez now</h1>
+        <!-- Dynamically loaded contents of people.txt will appear here -->
+        <div id="people-list">
+            Loading people list...
+        </div>
+    </center>
 
-  <!-- Dynamically loaded contents of people.txt will appear here -->
-  <pre id="people-list">Loading people list...</pre>
+    <script>
+        // Function to fetch the contents of people.txt and display it
+        fetch('people.txt')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File not found');
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Convert the contents into clickable spans for animation effects
+                const names = data.split('\n');
+                const listContainer = document.getElementById('people-list');
+                listContainer.innerHTML = '';  // Clear the loading text
 
-</center>
-
-<script>
-    // Function to fetch the contents of people.txt and display it
-    fetch('people.txt')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('File not found');
-            }
-            return response.text();
-        })
-        .then(data => {
-            // Insert the file content into the pre element with id "people-list"
-            document.getElementById('people-list').textContent = data;
-        })
-        .catch(error => {
-            // If there's an error (e.g., file not found), display a message
-            document.getElementById('people-list').textContent = 'Error loading people.txt';
-            console.error(error);
-        });
-</script>
-
+                names.forEach(name => {
+                    const nameElement = document.createElement('span');
+                    nameElement.textContent = name;
+                    nameElement.addEventListener('click', () => {
+                        nameElement.classList.add('flying');
+                    });
+                    listContainer.appendChild(nameElement);
+                });
+            })
+            .catch(error => {
+                // If there's an error (e.g., file not found), display a message
+                document.getElementById('people-list').textContent = 'Error loading people.txt';
+                console.error(error);
+            });
+    </script>
 </body>
 </html>
