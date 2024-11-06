@@ -167,11 +167,13 @@
                 const acceptedBox = document.getElementById('accepted');
 
                 let currentNames = []; // Store current floating names
+                const h1Height = document.querySelector('h1').offsetHeight; // Get the height of the h1 element
+                const minY = h1Height + 30; // Ensure names don't appear too close to the h1
 
-                // Function to generate random position
+                // Function to generate random position, avoiding the top area where h1 is
                 function getRandomPosition() {
-                    const x = Math.random() * (window.innerWidth - 150); // avoid overflow on right
-                    const y = Math.random() * (window.innerHeight - 150); // avoid overflow on bottom
+                    const x = Math.random() * (window.innerWidth - 150); // Avoid overflow on the right
+                    const y = Math.random() * (window.innerHeight - minY - 150) + minY; // Avoid the area near the h1
                     return { x, y };
                 }
 
