@@ -166,6 +166,8 @@
                 const names = data.split('\n').filter(name => name.trim() !== ''); // Handle any empty lines
                 const acceptedBox = document.getElementById('accepted');
 
+                let currentNames = []; // Store current floating names
+
                 // Function to generate random position
                 function getRandomPosition() {
                     const x = Math.random() * (window.innerWidth - 150); // avoid overflow on right
@@ -173,8 +175,21 @@
                     return { x, y };
                 }
 
-                // Create floating names dynamically
-                names.forEach(name => {
+                // Function to generate random size and angle for 'ACCEPTED!' box
+                function randomizeAcceptedBox() {
+                    const size = Math.random() * 4 + 4; // Random size between 4 and 8 rem
+                    const angle = Math.random() * 360 - 180; // Random angle between -180 and 180 degrees
+                    const x = Math.random() * (window.innerWidth - 200); // Random X position
+                    const y = Math.random() * (window.innerHeight - 200); // Random Y position
+
+                    acceptedBox.style.fontSize = `${size}rem`;
+                    acceptedBox.style.transform = `rotate(${angle}deg)`;
+                    acceptedBox.style.left = `${x}px`;
+                    acceptedBox.style.top = `${y}px`;
+                }
+
+                // Function to create a new floating name element
+                function createFloatingName(name) {
                     const nameElement = document.createElement('div');
                     nameElement.classList.add('floating-name');
                     nameElement.textContent = name;
@@ -188,12 +203,30 @@
                     nameElement.addEventListener('click', () => {
                         nameElement.classList.add('flying');
                         acceptedBox.style.display = 'block'; // Show the ACCEPTED box
+                        randomizeAcceptedBox(); // Randomize ACCEPTED box position and size
                         setTimeout(() => {
                             acceptedBox.style.display = 'none'; // Hide it after animation
                         }, 500); // Hide after highlight animation ends
+
+                        // After flying off, remove the name and create a new one
+                        setTimeout(() => {
+                            nameElement.remove();
+                            if (currentNames.length < names.length) {
+                                const newName = names[Math.floor(Math.random() * names.length)];
+                                currentNames.push(newName);
+                                createFloatingName(newName);
+                            }
+                        }, 2000); // Remove name after flying animation
+
                     });
 
                     document.body.appendChild(nameElement);
+                    currentNames.push(name);
+                }
+
+                // Create the floating names initially
+                names.slice(0, 10).forEach(name => { // Only show the first 10 names at a time
+                    createFloatingName(name);
                 });
             })
             .catch(error => {
