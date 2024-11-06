@@ -42,7 +42,7 @@
 
         /* Highlighted accepted text box */
         #accepted {
-            font-size: 6rem;
+            font-size: 5rem; /* Smaller size */
             font-weight: bolder;
             color: white;
             position: absolute;
@@ -149,7 +149,7 @@
 <body>
 
     <h1>List of Deportations cuz damn trump is prez now</h1>
-    <!-- The 'DEPORTED!' box -->
+    <!-- The 'ACCEPTED!' box -->
     <div id="accepted">DEPORTED!</div>
 
     <script>
@@ -177,7 +177,7 @@
 
                 // Function to generate random size and angle for 'ACCEPTED!' box
                 function randomizeAcceptedBox() {
-                    const size = Math.random() * 4 + 4; // Random size between 4 and 8 rem
+                    const size = Math.random() * 3 + 3; // Random size between 3 and 6 rem (smaller box)
                     const angle = Math.random() * 360 - 180; // Random angle between -180 and 180 degrees
                     const x = Math.random() * (window.innerWidth - 200); // Random X position
                     const y = Math.random() * (window.innerHeight - 200); // Random Y position
@@ -225,7 +225,7 @@
                 }
 
                 // Create the floating names initially
-                names.slice(0, 10).forEach(name => { // Only show the first 10 names at a time
+                names.slice(0, 20).forEach(name => { // Start with 20 names
                     createFloatingName(name);
                 });
             })
